@@ -1,10 +1,123 @@
+<?php
+use Zend\Form\View\Helper\FormSelect;
+?>
 <!DOCTYPE html>
 <html>
 <head>
+ 	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+	
+	google.charts.load('current', {'packages':['corechart']});
+    	google.charts.setOnLoadCallback(drawChart);
+    	function drawChart() {	
+        	var data = new google.visualization.DataTable();
+        	data.addColumn('string','Tiempo');
+            data.addColumn('timeofday','Duración');
+
+
+        	var prueba = document.getElementById("prueba").value
+
+        	
+
+        	<?php 
+        	   for($i=0 ; $i < $numeroTotal; $i++){
+        	?>
+        		var prueba = '<?php echo $simulacro[$i]['tiempo_estoy_listo']; ?>'
+        		var res = prueba.split(":");
+        		data.addRow(['<?php echo $simulacro[$i]['nombre']; ?>', [parseInt(res[0]), parseInt(res[1]), parseInt(res[2])]]);
+        	<?php 
+               }
+            ?>
+        	        	
+        	
+
+    	 var options = {'title':'TIEMPOS DE EVACUACIÓN',
+                 'width':1000,
+                 'height':400,
+                 'backgroundColor':'#E0E6F8',  
+                 'vAxis': {title: 'Duración'},
+                 'hAxis': {title: 'Voluntario(s)'},
+                };
+	
+		// Instantiate and draw our chart, passing in some options.
+  		var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+  		chart.draw(data, options);
+    	}
+
+//   	function graficados() {	
+        	
+//         	var datos = new google.visualization.DataTable();
+//         	datos.addColumn('string','Tiempo');
+//             datos.addColumn('timeofday','Duración');
+
+//         	var dos = document.getElementById("dos").value
+
+        	<?php 
+//         	for($i=0 ; $i < $graficadosTotal; $i++){
+//         	?>
+        		
+        	<?php 
+//                }
+//             ?>
+
+//     	 var option = {'title':'TIEMPOS DE EVACUACIÓN',
+//                  'width':1000,
+//                  'height':400,
+//                  'backgroundColor':'#E0E6F8',  
+//                  'vAxis': {title: 'Duración'},
+//                  'hAxis': {title: 'Voluntario(s)'},
+//                 };
+	
+// 		// Instantiate and draw our chart, passing in some options.
+//     	 var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+//    		chart.draw(data, options);
+//      	}
+	</script>
+	
+	
 <meta charset="UTF-8">
 <title>Insert title here</title>
+
 </head>
 <body>
-<p><?php print_r($simulacro)?></p>
+
+
+<?php 
+$form = $this->form;
+$form->prepare();
+
+// $form->setAttributes(array(
+//     'action' => $this->url . '/application/Graficas/recibe',
+//     'method' => 'post'
+// ));
+$form->setAttributes(array(
+'action' => $this->url . '/application/Graficas/graficas',
+'method' => 'post'
+));
+$formLabel = $this->plugin('formLabel');
+
+echo $this->form()->openTag($form);
+
+?>
+
+ <hr /> 
+ <div class="form_element"> 
+    <?php
+        $nombreSimulacro = $form->get('nombreSimulacro');
+        echo $formLabel->openTag() . $nombreSimulacro->getLabel();
+        echo $formLabel->closeTag();
+        echo $this->formSelect($nombreSimulacro);
+        echo $this->formElementErrors($nombreSimulacro);
+    ?>
+    
+ <?php echo $this->formElement($form->get('send')) ?>
+
+</div>
+<hr /> 
+
+<input id="prueba" value="<?php print_r($numeroTotal)?>"  style="display:none; disabled:true;">
+<input id="prueba" value="<?php print_r($graficadosTotal)?>"  style="display:none; disabled:true;">
+ <div id="chart_div"></div>
+ 
 </body>
 </html>

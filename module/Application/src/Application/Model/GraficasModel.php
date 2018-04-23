@@ -22,7 +22,9 @@ class GraficasModel extends TableGateway
 
     public function tiempo($dataSimulacro)
     {
-        // print_r("hola de nuevo ");
+//         print_r("hola de nuevo ");
+//         print_r($dataSimulacro[0]);
+//         $id=$dataSimulacro[0];
         // $consulta=$this->dbAdapter->query("select id , folio FROM usuarios where nombre = '" . $dataUser['nombre']."' and correo = '".$dataUser['correo']. "'" ,Adapter::QUERY_MODE_EXECUTE);
         $query = "SELECT
                     aa.tiempo_estoy_listo,
@@ -31,12 +33,73 @@ class GraficasModel extends TableGateway
                   FROM
                     voluntario_simulacro_grupo aa
                     INNER JOIN voluntarioCreador bb ON aa.idVoluntario = bb.id
-                  
+                  where 
+                        aa.idSimulacro='" . $dataSimulacro[0]."'
                   ORDER BY tiempo_estoy_listo";
+//         $query = 'select REPLACE(aa.tiempo_estoy_listo, ":",",") as tiempo_estoy_listo,
+//     aa.idVoluntario,bb.nombre from voluntario_simulacro_grupo aa inner join voluntariocreador bb
+//      on aa.idVoluntario=bb.id where aa.idSimulacro='. $dataSimulacro[0] . ' order by tiempo_estoy_listo';
+       
         $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
         
         $res = $consulta->toArray();
-      
+        
+//         print_r($res);exit;
+  
+        return $res;
+    }
+    
+    public function busqueda()
+    {
+        // print_r("hola de nuevo ");
+        // $consulta=$this->dbAdapter->query("select id , folio FROM usuarios where nombre = '" . $dataUser['nombre']."' and correo = '".$dataUser['correo']. "'" ,Adapter::QUERY_MODE_EXECUTE);
+        $query = "SELECT
+                        id,
+                       tagGrupal 
+                    FROM
+                       simulacrogrupo
+                    
+                    ";
+        $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
+        
+        $res = $consulta->toArray();
+       
+        return $res;
+    }
+    
+    
+    public function graficados($dataSimulacro)
+    {
+//         print_r("hola de nuevo ");
+//         print_r($dataSimulacro);
+       
+//         exit;
+        // $consulta=$this->dbAdapter->query("select id , folio FROM usuarios where nombre = '" . $dataUser['nombre']."' and correo = '".$dataUser['correo']. "'" ,Adapter::QUERY_MODE_EXECUTE);
+        $query ="SELECT
+                    s.tiempo_estoy_listo,
+                	v.nombre
+                FROM
+                    voluntario_simulacro_grupo s
+                INNER JOIN voluntarioCreador v ON
+                    s.idvoluntario = v.id
+                INNER JOIN(
+                    SELECT
+                        MIN(tiempo_estoy_listo) AS minimo,
+                        MAX(tiempo_estoy_listo) AS maximo
+                    FROM
+                        voluntario_simulacro_grupo
+                    WHERE
+                        idSimulacro = '" . $dataSimulacro[0]."'
+                ) m
+                ON
+                    tiempo_estoy_listo = m.minimo OR tiempo_estoy_listo = m.maximo AND s.idSimulacro = '" . $dataSimulacro[0]."'";
+        
+        $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
+        
+        $res = $consulta->toArray();
+        
+//         print_r($res);exit;
+        
         return $res;
     }
 }

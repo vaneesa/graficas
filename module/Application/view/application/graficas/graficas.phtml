@@ -9,6 +9,7 @@ use Zend\Form\View\Helper\FormSelect;
 	
 	google.charts.load('current', {'packages':['corechart']});
     	google.charts.setOnLoadCallback(drawChart);
+    	
     	function drawChart() {	
         	var data = new google.visualization.DataTable();
         	data.addColumn('string','Tiempo');
@@ -28,10 +29,8 @@ use Zend\Form\View\Helper\FormSelect;
         	<?php 
                }
             ?>
-        	        	
-        	
-
-    	 var options = {'title':'TIEMPOS DE EVACUACIÓN',
+            
+    	 var option = {'title':'TIEMPOS DE EVACUACIÓN',
                  'width':1000,
                  'height':400,
                  'backgroundColor':'#E0E6F8',  
@@ -41,38 +40,42 @@ use Zend\Form\View\Helper\FormSelect;
 	
 		// Instantiate and draw our chart, passing in some options.
   		var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-  		chart.draw(data, options);
+  		chart.draw(data, option);
     	}
 
-//   	function graficados() {	
+      	function graficados() {	
         	
-//         	var datos = new google.visualization.DataTable();
-//         	datos.addColumn('string','Tiempo');
-//             datos.addColumn('timeofday','Duración');
+        	var datos = new google.visualization.DataTable();
+        	datos.addColumn('string','Tiempo');
+            datos.addColumn('timeofday','Duración');
 
-//         	var dos = document.getElementById("dos").value
+        	var dos = document.getElementById("dos").value
 
         	<?php 
-//         	for($i=0 ; $i < $graficadosTotal; $i++){
-//         	?>
-        		
+        	for($i=0 ; $i < $graficadosTotal; $i++){
+        	?>
+        		var dos = '<?php echo $graficados[$i]['tiempo_estoy_listo']; ?>'
+        		var res = dos.split(":");
+        		datos.addRow(['<?php echo $graficados[$i]['nombre']; ?>', [parseInt(res[0]), parseInt(res[1]), parseInt(res[2])]]);
         	<?php 
-//                }
-//             ?>
+               }
+            ?>
 
-//     	 var option = {'title':'TIEMPOS DE EVACUACIÓN',
-//                  'width':1000,
-//                  'height':400,
-//                  'backgroundColor':'#E0E6F8',  
-//                  'vAxis': {title: 'Duración'},
-//                  'hAxis': {title: 'Voluntario(s)'},
-//                 };
-	
-// 		// Instantiate and draw our chart, passing in some options.
-//     	 var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-//    		chart.draw(data, options);
-//      	}
+    	 var options = {'title':'TIEMPOS DE EVACUACIÓN',
+                 'width':1000,
+                 'height':400,
+                 'backgroundColor':'#E0E6F8',  
+                 'vAxis': {title: 'Duración'},
+                 'hAxis': {title: 'Voluntario(s)'},
+                };
+
+    	// Instantiate and draw our chart, passing in some options.
+    	 var charta = new google.visualization.ColumnChart(document.getElementById('grafica_dos'));
+    		charta.draw(data, options);
+     	}
+
 	</script>
+	
 	
 	
 <meta charset="UTF-8">
@@ -118,6 +121,7 @@ echo $this->form()->openTag($form);
 <input id="prueba" value="<?php print_r($numeroTotal)?>"  style="display:none; disabled:true;">
 <input id="prueba" value="<?php print_r($graficadosTotal)?>"  style="display:none; disabled:true;">
  <div id="chart_div"></div>
+ <div id="grafica_dos"></div>
  
 </body>
 </html>

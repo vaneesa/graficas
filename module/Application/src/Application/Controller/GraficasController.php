@@ -38,12 +38,13 @@ class GraficasController extends AbstractActionController
         // print_r("hola entre ");
 //         print_r($postData);
         $result="";
+        $resultdos="";
         if ($this->request->getPost("send")) {
             $result = $this->getGraficasService()->tiempoGrafica($postData);
-            print_r($result);
+//             print_r($result);
             $resultdos = $this->getGraficasService()->graficados($postData);
-            print_r(" ************ hola entre *****************");
-            print_r($resultdos);
+//             print_r(" ************ hola entre *****************");
+//             print_r($resultdos);
         }
         
         // print_r("hola entre ");

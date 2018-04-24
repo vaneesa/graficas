@@ -57,5 +57,26 @@ class GraficasService
 	    return $graficados;
 	}
 	
+	
+	public function graficaPromedio($dataSimulacro)
+	{
+	    
+	    $datos = explode('=', $dataSimulacro, 4);
+	    // 	   print_r($datos);exit;
+	    // 	   print_r("    ");
+	    // 	   print_r($datos[1]);
+	    $datos1 = explode('&', $datos[1], 4);
+	    // 	   $folioExtrae = substr($datos[1], 6,0);
+	    // 	   print_r("    ");
+	    // 	   print_r($datos1);
+	    // 	   print_r("    ");
+	    // 	    	   print_r($datos1[0]);
+	    // 	    	   exit;
+	    
+	    $graficados = $this->getGraficasModel()->graficaPromedio($datos1);
+	    
+	    
+	    return $graficados;
+	}
 }
 ?>

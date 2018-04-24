@@ -75,30 +75,61 @@ class GraficasModel extends TableGateway
        
 //         exit;
         // $consulta=$this->dbAdapter->query("select id , folio FROM usuarios where nombre = '" . $dataUser['nombre']."' and correo = '".$dataUser['correo']. "'" ,Adapter::QUERY_MODE_EXECUTE);
-        $query ="SELECT
+        $query ="SELECT 
                     s.tiempo_estoy_listo,
-                	v.nombre
-                FROM
-                    voluntario_simulacro_grupo s
-                INNER JOIN voluntarioCreador v ON
-                    s.idvoluntario = v.id
-                INNER JOIN(
-                    SELECT
-                        MIN(tiempo_estoy_listo) AS minimo,
-                        MAX(tiempo_estoy_listo) AS maximo
+                    v.nombre
                     FROM
+                      voluntario_simulacro_grupo s
+                    INNER JOIN
+                      voluntarioCreador v ON s.idvoluntario = v.id
+                    INNER JOIN
+                      (
+                      SELECT
+                          MIN(tiempo_estoy_listo) AS minimo,
+                        MAX(tiempo_estoy_listo) AS maximo
+                      FROM
                         voluntario_simulacro_grupo
-                    WHERE
+                      WHERE
                         idSimulacro = '" . $dataSimulacro[0]."'
-                ) m
-                ON
-                    tiempo_estoy_listo = m.minimo OR tiempo_estoy_listo = m.maximo AND s.idSimulacro = '" . $dataSimulacro[0]."'";
+                    ) m ON s.tiempo_estoy_listo = m.minimo OR s.tiempo_estoy_listo = m.maximo AND s.idSimulacro = '" . $dataSimulacro[0]."'";
         
-        $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
+              $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
         
         $res = $consulta->toArray();
         
 //         print_r($res);exit;
+        
+        return $res;
+    }
+    
+    public function graficaPromedio($dataSimulacro)
+    {
+//                 print_r("hola de nuevo ");
+//                 print_r($dataSimulacro);
+        
+//                 exit;
+        // $consulta=$this->dbAdapter->query("select id , folio FROM usuarios where nombre = '" . $dataUser['nombre']."' and correo = '".$dataUser['correo']. "'" ,Adapter::QUERY_MODE_EXECUTE);
+        $query ="SELECT
+                          SEC_TO_TIME(
+                            ROUND(
+                              AVG(
+                                TIME_TO_SEC(aa.tiempo_estoy_listo)
+                              )
+                           )
+                          ) AS promedio,
+                    bb.ubicacion
+                    FROM
+                      voluntario_simulacro_grupo aa INNER join simulacrogrupo bb ON aa.idSimulacro = bb.id
+                    WHERE
+                    	aa.idSimulacro='" . $dataSimulacro[0]."'
+                    GROUP BY
+                      aa.idSimulacro";
+     
+        $consulta = $this->dbAdapter->query($query, Adapter::QUERY_MODE_EXECUTE);
+        
+        $res = $consulta->toArray();
+        
+        //         print_r($res);exit;
         
         return $res;
     }

@@ -20,33 +20,6 @@ class Formulario extends Form
     
     public function __construct($name = null)
     {
-//         parent::__construct($name);
-//         $factory = new Factory();
-        
-//         $graficaSimulacro = $this->getGraficasModel()->busqueda();
-        
-// //         print_r("llegue");
-// //         print_r($graficaSimulacro[]['id']);
-        
-//         $select = new Element\Select('nombreSimulacro');
-//         $select->setLabel('Simulacro ');
-// //         $select->setAttribute('multiple', true);
-//         $select->setEmptyOption('Seleccione...');
-//         $i="";
-//         $array= array();
-        
-//         foreach($graficaSimulacro as $row){
-// //             $i .= $row['tagGrupal'];
-//             array_push($array,$row['tagGrupal']);
-//             $select->setValueOptions($array);
-            
-//         }
-// //         print_r($select->getValueOptions($array[0][0]));
-// //         exit;
-//         $this->add($select);
-        
-        
-//         *******************************
         parent::__construct($name);
         $factory = new Factory();
         
@@ -57,12 +30,8 @@ class Formulario extends Form
         
         $select = new Element\Select('nombreSimulacro');
         $select->setLabel('Simulacro ');
-        //         $select->setAttribute('multiple', true);
         $select->setEmptyOption('Seleccione...');
-        //         $select->setValueOptions(array(
-        //                     'simulacro' => $graficaSimulacro
-        //                 ));
-        
+    
         $valor=array();
 //         print_r(count($graficaSimulacro));exit;
         foreach($graficaSimulacro as $row){

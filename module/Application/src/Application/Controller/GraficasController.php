@@ -39,12 +39,22 @@ class GraficasController extends AbstractActionController
 //         print_r($postData);
         $result="";
         $resultdos="";
+        $resultPromedio="";
+        $voluntario="";
+        $nomMaxMin="";
+        $promedioSimulacro="";
+        
         if ($this->request->getPost("send")) {
             $result = $this->getGraficasService()->tiempoGrafica($postData);
 //             print_r($result);
+            $voluntario="Voluntarios";
             $resultdos = $this->getGraficasService()->graficados($postData);
-//             print_r(" ************ hola entre *****************");
-//             print_r($resultdos);
+//                 print_r(" ************ hola entre *****************");
+//                 print_r($resultdos);
+            $nomMaxMin="Mínimo y Máximo";
+            $resultPromedio = $this->getGraficasService()->graficaPromedio($postData);
+//             print_r($resultPromedio);
+            $promedioSimulacro="Promedio de Simulacro";
         }
         
         // print_r("hola entre ");
@@ -56,7 +66,12 @@ class GraficasController extends AbstractActionController
             "simulacro" => $result,
             "numeroTotal" => count($result),
             "graficados" => $resultdos,
-            "graficadosTotal" => count($resultdos)
+            "graficadosTotal" => count($resultdos),
+            "graficaPromedio" => $resultPromedio,
+            "graficaPromedioTotal" => count($resultPromedio),
+            "voluntario" =>$voluntario,
+            "maxMin" => $nomMaxMin,
+            "promedioSimulacro" => $promedioSimulacro,
             
         ));
     }
